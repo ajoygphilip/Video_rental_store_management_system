@@ -6,6 +6,7 @@
 db.sqlite3
 media
 instructions.txt
+*/migrations/
 
 
 # Visual Studio Code # 
