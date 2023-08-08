@@ -1,4 +1,7 @@
 from django.db import models
+from accountsapp.models import Profile
+from datetime import datetime, timedelta
+
 
 # Create your models here.
 class Movie(models.Model):
