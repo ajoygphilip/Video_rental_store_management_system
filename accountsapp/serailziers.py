@@ -1,15 +1,15 @@
 from rest_framework import serializers
-from .models import Member
+from .models import Profile
 from django.contrib.auth.models import User
 
 
 
-class MemberSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
 
     username = serializers.CharField(source='user.username', read_only=True)
 
     class Meta:
-        model = Member
+        model = Profile
         fields = ("id", "username", "is_active", 'is_staff',)
 
 

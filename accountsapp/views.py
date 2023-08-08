@@ -5,18 +5,16 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 
-from .models import Member
-from .serailziers import MemberSerializer, UserRegistrationSerializer
-
+from .models import Profile
+from .serailziers import ProfileSerializer, UserRegistrationSerializer
 
 class MemberViewset(viewsets.ModelViewSet):
-    queryset = Member.objects.all()
-    serializer_class = MemberSerializer
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
 
 @api_view(['POST',])
 def registration_view(request):
-    
     data={}
     
     serializer = UserRegistrationSerializer(data=request.data)
