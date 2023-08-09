@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Movie, MovieCopy
+from .models import Movie, MovieCopy, RentedMovie
 
 
 class MovieSerializer(serializers.ModelSerializer):
@@ -20,3 +20,8 @@ class MovieCopyReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = MovieCopy
         fields = ('id', 'title')
+
+class RentedMovieSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RentedMovie
+        fields = ('__all__')
