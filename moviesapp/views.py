@@ -82,7 +82,7 @@ class MovieCopyViewset(viewsets.ModelViewSet):
 
 class RentedMovieViewset(viewsets.ModelViewSet):
     serializer_class = RentedMovieSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsStaffOrReadOnly)
 
     def get_queryset(self):
         if self.request.user.profile.is_staff:
@@ -93,7 +93,7 @@ class RentedMovieViewset(viewsets.ModelViewSet):
 
 class RentedMovieHistoryViewset(viewsets.ModelViewSet):
     serializer_class = RentedMovieHistorySerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsStaffOrReadOnly)
 
     def get_queryset(self):
         if self.request.user.profile.is_staff:
