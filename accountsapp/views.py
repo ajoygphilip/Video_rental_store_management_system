@@ -12,7 +12,6 @@ class MemberViewset(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
-
 @api_view(['POST',])
 def registration_view(request):
     data={}
@@ -29,7 +28,6 @@ def registration_view(request):
     else:
         return Response(serializer.errors)
     
-
 @api_view(['POST',])
 def logout_view(request):
     

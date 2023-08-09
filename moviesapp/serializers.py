@@ -1,13 +1,10 @@
 from rest_framework import serializers
 from .models import Movie, MovieCopy, RentedMovie
 
-
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = ('__all__')
-
-
 
 class MovieCopySerializer(serializers.ModelSerializer):
     title = serializers.CharField(source='movie.title')
@@ -23,8 +20,6 @@ class MovieCopySerializer(serializers.ModelSerializer):
     class Meta:
         model = MovieCopy
         fields = ('id','title','movie','is_rented',"rented_by")
-
-
 
 class RentedMovieSerializer(serializers.ModelSerializer):
     fine_amount = serializers.ReadOnlyField()

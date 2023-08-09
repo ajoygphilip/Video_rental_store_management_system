@@ -7,7 +7,6 @@ from rest_framework.response import Response
 from .permissions import IsStaff, IsStaffOrReadOnly
 from rest_framework.permissions import IsAuthenticated
 
-
 class MovieViewset(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
@@ -56,8 +55,6 @@ class MovieCopyViewset(viewsets.ModelViewSet):
     permission_classes = (IsStaff,)
     serializer_class = MovieCopySerializer
 
-    
-    
 class RentedMovieViewset(viewsets.ModelViewSet):
     serializer_class = RentedMovieSerializer
     permission_classes = (IsAuthenticated,)

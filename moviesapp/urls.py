@@ -10,5 +10,4 @@ router.register("rented/history", RentedMovieHistoryViewset, basename="rentalrec
 router.register("rented", RentedMovieViewset, basename="rentalrecord")
 router.register("", MovieViewset, basename="movies")
 
-
 urlpatterns = router.urls

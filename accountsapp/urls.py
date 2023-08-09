@@ -12,7 +12,6 @@ urlpatterns = [
     path('logout/',logout_view, name="logout"),
 ]
 
-
 router = routers.SimpleRouter()
 router.register("", MemberViewset, basename="accounts")
 urlpatterns += router.urls

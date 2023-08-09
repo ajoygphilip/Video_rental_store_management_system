@@ -3,8 +3,6 @@ from accountsapp.models import Profile
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 
-
-# Create your models here.
 class Movie(models.Model):
     '''This model represents one movie and stores related details.'''
     GENRE_CHOICES = (
