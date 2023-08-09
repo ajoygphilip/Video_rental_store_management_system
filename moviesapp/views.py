@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Movie, MovieCopy, RentedMovie
 from rest_framework import viewsets, status
-from .serializers import MovieSerializer, MovieCopySerializer, RentedMovieSerializer
+from .serializers import MovieSerializer, MovieCopySerializer, RentedMovieSerializer,RentedMovieHistorySerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .permissions import IsStaff, IsStaffOrReadOnly
@@ -59,6 +59,21 @@ class MovieCopyViewset(viewsets.ModelViewSet):
     
     
 class RentedMovieViewset(viewsets.ModelViewSet):
-    queryset = RentedMovie.objects.all()
     serializer_class = RentedMovieSerializer
-    permission_classes = (IsStaff,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        if self.request.user.profile.is_staff:
+            return RentedMovie.objects.filter(returned=False)
+        else:
+            return self.request.user.rented_movies.filter(returned=False)
+
+class RentedMovieHistoryViewset(viewsets.ModelViewSet):
+    serializer_class = RentedMovieHistorySerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        if self.request.user.profile.is_staff:
+            return RentedMovie.objects.all()
+        else:
+            return self.request.user.rented_movies.all()

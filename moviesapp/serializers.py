@@ -27,6 +27,13 @@ class MovieCopySerializer(serializers.ModelSerializer):
 
 
 class RentedMovieSerializer(serializers.ModelSerializer):
+    fine_amount = serializers.ReadOnlyField()
+    due_date = serializers.ReadOnlyField()
+    class Meta:
+        model = RentedMovie
+        fields = ('__all__')
+
+class RentedMovieHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = RentedMovie
         fields = ('__all__')
