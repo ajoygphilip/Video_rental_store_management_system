@@ -11,9 +11,18 @@ class MovieSerializer(serializers.ModelSerializer):
 
 class MovieCopySerializer(serializers.ModelSerializer):
     title = serializers.CharField(source='movie.title')
+    
+    rented_by = serializers.SerializerMethodField('get_rented_by')
+
+    def get_rented_by(self, obj):
+        try:
+            return str(obj.transfers.filter(returned=False)[0].customer)
+        except:
+            return None
+    
     class Meta:
         model = MovieCopy
-        fields = ('id','title','movie','is_rented')
+        fields = ('id','title','movie','is_rented',"rented_by")
 
 
 
