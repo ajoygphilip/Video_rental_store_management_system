@@ -9,6 +9,12 @@ class MovieSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 
+class MovieCopyWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MovieCopy
+        fields = ('__all__')
+
+
 class MovieCopySerializer(serializers.ModelSerializer):
     title = serializers.CharField(source='movie.title')
 

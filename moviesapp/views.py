@@ -10,6 +10,7 @@ from .serializers import (
     MovieCopySerializer,
     MovieSerializer,
     RentedMovieHistorySerializer,
+    MovieCopyWriteSerializer,
     RentedMovieSerializer,
 )
 
@@ -71,6 +72,12 @@ class MovieCopyViewset(viewsets.ModelViewSet):
     queryset = MovieCopy.objects.all()
     permission_classes = (IsStaff,)
     serializer_class = MovieCopySerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return MovieCopySerializer
+        else:
+            return MovieCopyWriteSerializer
 
 
 class RentedMovieViewset(viewsets.ModelViewSet):
