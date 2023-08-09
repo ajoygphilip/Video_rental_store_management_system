@@ -1,16 +1,19 @@
 from django.shortcuts import render
 from .models import Movie, MovieCopy, RentedMovie
 from rest_framework import viewsets, status
-from .serializers import MovieSerializer, MovieCopyReadSerializer, MovieCopyWriteSerializer, RentedMovieSerializer
+from .serializers import MovieSerializer, MovieCopySerializer, RentedMovieSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from .permissions import IsStaff, IsStaffOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 
 
 class MovieViewset(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
+    permission_classes = (IsStaffOrReadOnly,)
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'],permission_classes=(IsAuthenticated,))
     def rent(self, request, pk=None):
         
         if request.user.profile.is_currently_renting:
@@ -31,16 +34,31 @@ class MovieViewset(viewsets.ModelViewSet):
 
             return Response({'message': 'Rental Succesful'},
                                 status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['post'],permission_classes=(IsAuthenticated,))
+    def returnmovie(self, request, pk=None):
+        
+        if not request.user.profile.is_currently_renting:
+            return Response({'message': 'You have no pending returns'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        else:
+            rental_record = request.user.rented_movies.filter(returned=False)[0]
+            rental_record.returned=True
+            rental_record.save()
+            
+            copy=rental_record.moviecopy
+            copy.is_rented=False
+            copy.save()
+            return Response({"message":"movie returned"}, status=status.HTTP_200_OK)
 
 class MovieCopyViewset(viewsets.ModelViewSet):
     queryset = MovieCopy.objects.all()
-    
+    permission_classes = (IsStaff,)
+    serializer_class = MovieCopySerializer
 
-    def get_serializer_class(self):        
-        if self.action in ["create", "update", "partial_update", "destroy"]:
-            return MovieCopyWriteSerializer
-        return MovieCopyReadSerializer
+    
     
 class RentedMovieViewset(viewsets.ModelViewSet):
     queryset = RentedMovie.objects.all()
     serializer_class = RentedMovieSerializer
+    permission_classes = (IsStaff,)

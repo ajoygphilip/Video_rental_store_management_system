@@ -7,19 +7,15 @@ class MovieSerializer(serializers.ModelSerializer):
         model = Movie
         fields = ('__all__')
 
-class MovieCopyWriteSerializer(serializers.ModelSerializer):
-   
-    class Meta:
-        model = MovieCopy
-        fields = ('__all__')
 
 
-class MovieCopyReadSerializer(serializers.ModelSerializer):
+class MovieCopySerializer(serializers.ModelSerializer):
     title = serializers.CharField(source='movie.title')
-   
     class Meta:
         model = MovieCopy
-        fields = ('id', 'title')
+        fields = ('id','title','movie','is_rented')
+
+
 
 class RentedMovieSerializer(serializers.ModelSerializer):
     class Meta:
