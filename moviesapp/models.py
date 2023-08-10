@@ -70,7 +70,7 @@ class RentedMovie(models.Model):
         related_name="rented_movies",
     )
 
-    rented_date = models.DateField(verbose_name="Rented On", auto_now=True)
+    rented_date = models.DateField(verbose_name="Rented On", auto_now_add=True)
 
     returned = models.BooleanField(default=False)
 
@@ -88,15 +88,16 @@ class RentedMovie(models.Model):
 
         number_of_days_late = (datetime.today().date() - self.due_date).days
 
-        if number_of_days_late <= 7:
+        if number_of_days_late <= 14:
             return fine_per_day_for_first_week * number_of_days_late
 
         else:
+
             first_week_fine = fine_per_day_for_first_week * 7
             subsequent_week_fine = fine_per_day_from_week_two * (
                 number_of_days_late - 7
             )
-
+            print(number_of_days_late, first_week_fine, subsequent_week_fine)
             return first_week_fine + subsequent_week_fine
 
     def __str__(self):
