@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from rest_framework import routers
-from .views import MovieViewset, MovieCopyViewset, RentedMovieViewset, RentedMovieHistoryViewset
+from .views import MovieViewset, MovieCopyViewset, RentedMovieViewset, RentedMovieHistoryViewset, returnmovie
 
 router = routers.SimpleRouter()
 
@@ -12,3 +12,5 @@ router.register("rented", RentedMovieViewset, basename="rentalrecord")
 router.register("catalouge", MovieViewset, basename="movies")
 
 urlpatterns = router.urls
+
+urlpatterns += [path("return/", returnmovie, name="return-movie")]

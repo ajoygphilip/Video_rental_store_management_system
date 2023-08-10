@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import status, viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -49,24 +49,26 @@ class MovieViewset(viewsets.ModelViewSet):
 
             return Response({"message": "Rental Succesful"}, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=["post"], permission_classes=(IsAuthenticated,))
-    def returnmovie(self, request, pk=None):
-        if not request.user.profile.is_currently_renting:
-            return Response(
-                {"message": "You have no pending returns"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        else:
-            rental_record = request.user.rented_movies.filter(returned=False)[
-                0]
-            fine_amount = rental_record.fine_amount
-            rental_record.returned = True
-            rental_record.save()
 
-            copy = rental_record.moviecopy
-            copy.is_rented = False
-            copy.save()
-            return Response({"message": "Movie returned", "fine_amount": fine_amount}, status=status.HTTP_200_OK)
+@api_view(["POST",])
+@permission_classes((IsAuthenticated,))
+def returnmovie(request):
+    if not request.user.profile.is_currently_renting:
+        return Response(
+            {"message": "You have no pending returns"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    else:
+        rental_record = request.user.rented_movies.filter(returned=False)[
+            0]
+        fine_amount = rental_record.fine_amount
+        rental_record.returned = True
+        rental_record.save()
+
+        copy = rental_record.moviecopy
+        copy.is_rented = False
+        copy.save()
+        return Response({"message": "Movie returned", "fine_amount": fine_amount}, status=status.HTTP_200_OK)
 
 
 class MovieCopyViewset(viewsets.ModelViewSet):
