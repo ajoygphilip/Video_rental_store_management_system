@@ -20,6 +20,12 @@ class MovieViewset(viewsets.ModelViewSet):
     serializer_class = MovieSerializer
     permission_classes = (IsStaffOrReadOnly,)
 
+    @action(detail=True, methods=["get"], permission_classes=(IsAuthenticated, IsStaff))
+    def inventory(self, request, pk=None):
+        query = MovieCopy.objects.filter(movie__id=pk)
+        serializer = MovieCopySerializer(query, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
     def rent(self, request, pk=None):
         if request.user.profile.is_currently_renting:
