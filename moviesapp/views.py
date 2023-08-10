@@ -59,13 +59,14 @@ class MovieViewset(viewsets.ModelViewSet):
         else:
             rental_record = request.user.rented_movies.filter(returned=False)[
                 0]
+            fine_amount = rental_record.fine_amount
             rental_record.returned = True
             rental_record.save()
 
             copy = rental_record.moviecopy
             copy.is_rented = False
             copy.save()
-            return Response({"message": "Movie returned"}, status=status.HTTP_200_OK)
+            return Response({"message": "Movie returned", "fine_amount": fine_amount}, status=status.HTTP_200_OK)
 
 
 class MovieCopyViewset(viewsets.ModelViewSet):
